@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="T_LidApplyStation" Id="{ba5b0c5d-a171-41ee-a5ea-366ebc327b95}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK T_LidApplyStation EXTENDS T_Station
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	processState : (IDLE,EXTEND_APPLICATOR_ARM, WAIT,RETRACT_APPLICATOR_ARM, COMPLETE);
+	waitTimer : TON;
+	cylinder : I_Cylinder; 
+END_VAR
+VAR CONSTANT
+	PROCESS_TIME : TIME := T#2S;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[super^();]]></ST>
+    </Implementation>
+    <Method Name="Execute" Id="{4a41d72c-d121-41a4-9221-b45ba23d7293}">
+      <Declaration><![CDATA[METHOD PROTECTED Execute
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+
+CASE processState OF
+	
+	IDLE : // 
+	
+		waitTimer(IN:=FALSE);
+		processState := EXTEND_APPLICATOR_ARM;
+	
+	EXTEND_APPLICATOR_ARM : // 
+	
+		cylinder.Extend();
+		processState := WAIT;
+	
+	WAIT : //
+	
+		waitTimer(IN:=TRUE, PT:=PROCESS_TIME);
+		IF waitTimer.Q THEN
+			processState := RETRACT_APPLICATOR_ARM;
+		END_IF
+	
+	RETRACT_APPLICATOR_ARM : //
+	
+		cylinder.Retract();
+		processState := COMPLETE;
+	
+	COMPLETE: //
+	
+		StateComplete();
+		processState := IDLE;
+
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{5ce9571e-dbf5-4aa5-939d-cb6f8741dc0a}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	Cylinder : I_Cylinder;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^.cylinder := Cylinder;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="T_LidApplyStation">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="T_LidApplyStation.Execute">
+      <LineId Id="35" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="33" Count="1" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="37" Count="2" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="44" Count="2" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="47" Count="2" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+    </LineIds>
+    <LineIds Name="T_LidApplyStation.FB_init">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

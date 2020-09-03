@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="T_Cylinder" Id="{c63bce25-1b52-4e4c-8ee8-d2fd9e9d433d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK T_Cylinder IMPLEMENTS I_Cylinder
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	output AT %Q* : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Extend" Id="{cf5fa276-c409-4304-ad6f-33b500cc5c85}">
+      <Declaration><![CDATA[METHOD PUBLIC Extend
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[output := true;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Retract" Id="{6bca65bb-c7e5-4db3-a695-e9b3a6428a17}">
+      <Declaration><![CDATA[METHOD PUBLIC Retract
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[output := false;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="T_Cylinder">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Cylinder.Extend">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Cylinder.Retract">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

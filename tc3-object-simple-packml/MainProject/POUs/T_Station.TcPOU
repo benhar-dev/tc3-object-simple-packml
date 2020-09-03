@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="T_Station" Id="{af66dd37-e566-4098-b31a-20c8f52ec4ce}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK T_Station
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	StationState : (UNINITIALISED,INITIALISING,IDLE,STARTING,EXECUTE,COMPLETING,COMPLETE,STOPPING,STOPPED,RESETTING,HOLDING,HELD,UNHOLDING,SUSPENDING,SUSPENDED,UNSUSPENDING,CLEARING,ABORTED,ABORTING) := UNINITIALISED;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE StationState OF
+	
+	UNINITIALISED : Uninitialised();
+	INITIALISING : Initialising();
+	IDLE : Idle();
+	STARTING : Starting();
+	EXECUTE : Execute();
+	COMPLETING : Completing();
+	COMPLETE : Complete();
+	STOPPING : Stopping();
+	STOPPED : Stopped();
+	RESETTING : Resetting();
+	HOLDING : Holding();
+	HELD : Held();
+	UNHOLDING : Unholding();
+	SUSPENDING : Suspending();
+	SUSPENDED : Suspended();
+	UNSUSPENDING : Unsuspending();
+	CLEARING : Clearing();
+	ABORTED : Aborted();
+	ABORTING : Aborting();
+
+	
+END_CASE]]></ST>
+    </Implementation>
+    <Folder Name="Properties" Id="{52f0c7f8-3c8a-44f6-bd56-0f238c4b2843}" />
+    <Folder Name="Protected" Id="{4b5eb6c7-9cc4-440f-bddc-3677f96ad3ac}" />
+    <Folder Name="Public" Id="{fa8ef774-d56a-4c97-9bdb-c63b9516ab73}" />
+    <Method Name="Abort" Id="{a520719f-a1b1-4d16-8355-31f3320d9449}">
+      <Declaration><![CDATA[METHOD PUBLIC Abort
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StationState := ABORTING;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Aborted" Id="{b0a79dc2-0681-4a20-ba0e-3c71b39a8421}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Aborted
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Clear();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Aborting" Id="{2d12a2fe-e053-43bd-8fdd-962e6708895d}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Aborting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clear" Id="{7f112712-efe0-475b-9719-d2fe6c02119e}">
+      <Declaration><![CDATA[METHOD PUBLIC Clear
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StationState = ABORTED THEN 
+	StationState := CLEARING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Clearing" Id="{f5915f81-8f5c-4803-b20d-b7d42d0af75c}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Clearing
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Complete" Id="{c94f1380-ff2d-4a5a-b516-823e39e3d006}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Complete
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Reset();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Completing" Id="{f4608387-32bb-4940-bfc1-50f8b6eb0dd3}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Completing
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Execute" Id="{0c8af377-4b93-4f20-8003-8ca8d0a25d11}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Execute
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Held" Id="{2e243690-9cb5-46d5-9a7a-bd9ecda8d6fc}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Held
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Unhold();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Hold" Id="{cb44428f-9845-4edd-804c-5341d0fb7c9a}">
+      <Declaration><![CDATA[METHOD PUBLIC Hold
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StationState = EXECUTE THEN 
+	StationState := HOLDING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Holding" Id="{0c100a49-94e4-4dde-a0c0-cb3ad11198ca}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Holding
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Idle" Id="{6dc1e4e9-b2bd-4575-8740-18866a95289f}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Idle
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialise" Id="{cc5cf9c1-2125-4931-988c-9a76ccb1b2c4}">
+      <Declaration><![CDATA[METHOD PUBLIC Initialise
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StationState = UNINITIALISED THEN 
+	StationState := INITIALISING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialising" Id="{535c9b2e-1903-4e2f-a05b-79032e25e614}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Initialising
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="isExecuting" Id="{dcb2dbd5-660d-44dc-962f-fdf71cf06dd0}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PUBLIC isExecuting : bool]]></Declaration>
+      <Get Name="Get" Id="{84a8a7a6-dc3e-4d65-a10b-d54a25ff2b76}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[isExecuting := (StationState = EXECUTE);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="isInitialised" Id="{b50900f9-0424-4d07-9d90-fd167c37a82d}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PUBLIC isInitialised : bool]]></Declaration>
+      <Get Name="Get" Id="{1c1d22dc-7a78-4e0d-b16b-f6aafda26d64}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[isInitialised := (StationState <> UNINITIALISED);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="isStopped" Id="{5fee37a8-a905-4fd8-9ea2-98098fc781d3}" FolderPath="Properties\">
+      <Declaration><![CDATA[PROPERTY PUBLIC isStopped : BOOL]]></Declaration>
+      <Get Name="Get" Id="{344c8bf3-850b-4a75-861d-edd78dcaa5fd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[isStopped := (StationState = STOPPED);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Reset" Id="{9ebcb008-239f-426a-a486-4cd687d941c2}">
+      <Declaration><![CDATA[METHOD PUBLIC Reset
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF (StationState = STOPPED) or (StationState = COMPLETE) THEN 
+	StationState := RESETTING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Resetting" Id="{c875be92-f4e0-4f95-b6a6-d9d97d840674}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Resetting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Start" Id="{52dfe052-a817-49c7-a126-6dd1ddafe424}">
+      <Declaration><![CDATA[METHOD PUBLIC Start
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StationState = IDLE THEN 
+	StationState := STARTING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Starting" Id="{d923071a-685d-43e0-83d3-e1f576352a1b}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Starting
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StateComplete" Id="{16891d18-8fa4-423c-bdb6-f922ff7fea6e}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED StateComplete
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE StationState OF 
+	
+	UNINITIALISED : RETURN;
+	INITIALISING : StationState := IDLE;
+	IDLE : RETURN;
+	STARTING : StationState := EXECUTE;
+	EXECUTE : StationState := COMPLETING;
+	COMPLETING : StationState := COMPLETE;
+	COMPLETE : RETURN;
+	STOPPING : StationState := STOPPED;
+	STOPPED : RETURN;
+	RESETTING : StationState := IDLE;
+	HOLDING : StationState := HELD;
+	HELD : RETURN;
+	UNHOLDING : StationState := EXECUTE;
+	SUSPENDING : StationState := SUSPENDED;
+	SUSPENDED : RETURN;
+	UNSUSPENDING : StationState := EXECUTE;
+	CLEARING : StationState := STOPPED;
+	ABORTED : RETURN;
+	ABORTING : StationState := ABORTED;
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{fb16f20e-02a8-45d4-8a7e-0f3fd3ad820c}">
+      <Declaration><![CDATA[METHOD PUBLIC Stop
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE StationState OF
+	STOPPED: RETURN;
+	STOPPING: RETURN;
+	CLEARING: RETURN;
+	ABORTED: RETURN;
+	ABORTING: RETURN;
+END_CASE
+
+StationState := STOPPING;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stopped" Id="{612d486d-015b-4462-a207-bc63e2af84f9}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Stopped
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Reset();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stopping" Id="{144bddbd-d5d7-47d9-9c93-08b32ce7005a}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Stopping
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Suspend" Id="{51158d8d-0543-4dc5-a48e-7210784018b3}">
+      <Declaration><![CDATA[METHOD PUBLIC Suspend
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StationState = EXECUTE THEN 
+	StationState := SUSPENDING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Suspended" Id="{47ba4256-5446-4535-b503-902583eeceb3}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Suspended
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Unsuspended();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Suspending" Id="{1b3b1330-6e5b-4d2c-b61e-bb699f1e1f6e}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Suspending
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Unhold" Id="{cbeca0b6-95f6-4d39-93d6-6d287c1657d9}">
+      <Declaration><![CDATA[METHOD PUBLIC Unhold
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StationState = HELD THEN 
+	StationState := UNHOLDING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Unholding" Id="{5304c905-32c6-4a4a-9891-02fad8bd4aa0}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Unholding
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Uninitialised" Id="{ca10a9e2-261f-46ac-a51e-d6959e1b1d2b}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Uninitialised
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Initialise();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Unsuspended" Id="{2e7785ee-93f8-4288-a23d-a0fae621a498}">
+      <Declaration><![CDATA[METHOD PUBLIC Unsuspended
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF StationState = SUSPENDED THEN 
+	StationState := UNSUSPENDING;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Unsuspending" Id="{9e1f8e5f-473e-4016-be22-70fa78e8f3a7}" FolderPath="Protected\">
+      <Declaration><![CDATA[METHOD PROTECTED Unsuspending
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[StateComplete();]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="T_Station">
+      <LineId Id="9" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="47" Count="13" />
+      <LineId Id="65" Count="0" />
+      <LineId Id="62" Count="2" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Abort">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Aborted">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Aborting">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Clear">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Clearing">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Complete">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Completing">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Execute">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Held">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Hold">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Holding">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Idle">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Initialise">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Initialising">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.isExecuting.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.isInitialised.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.isStopped.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Reset">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Resetting">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Start">
+      <LineId Id="5" Count="2" />
+    </LineIds>
+    <LineIds Name="T_Station.Starting">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.StateComplete">
+      <LineId Id="5" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="18" Count="17" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="6" Count="1" />
+    </LineIds>
+    <LineIds Name="T_Station.Stop">
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="3" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="6" Count="1" />
+    </LineIds>
+    <LineIds Name="T_Station.Stopped">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Stopping">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Suspend">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Suspended">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Suspending">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Unhold">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Unholding">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Uninitialised">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Unsuspended">
+      <LineId Id="6" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="T_Station.Unsuspending">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
